@@ -30,6 +30,8 @@ pipeline {
                 '''
             }
         }
+    }
+    stages {
         stage('Pushing Image') { 
             steps {
                 sh 'echo "Pusing Image to registry"'
@@ -39,6 +41,8 @@ pipeline {
                 '''
             }
         }
+    }
+    stages {
         stage('Cleanup') { 
             steps {
                 sh 'echo "Stoping Container and removing image"'
