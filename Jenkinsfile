@@ -1,5 +1,7 @@
 pipeline {
-    agent any 
+    agent {
+        label 'linux2'
+    } 
     environment {
         DOCKER_USERNAME     = credentials('jenkins-docker-username')
         DOCKER_PASSWORD     = credentials('jenkins-docker-password')
