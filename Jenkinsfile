@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh 'echo "Building docker image"'
                 sh '''
-                    docker build -t jhadeepak/jenkins:$BUILD_NUMBER .
+                    sudo docker build -t jhadeepak/jenkins:$BUILD_NUMBER .
                 '''
             }
         }
@@ -19,9 +19,12 @@ pipeline {
             steps {
                 sh 'echo "Testing Image by building container"'
                 sh '''
-                    docker run -d --rm -it -p 80$BUILD_NUMBER:80 --name webserver-$BUILD_NUMBER jhadeepak/jenkins:$BUILD_NUMBER
+                    sudo docker run -d --rm -it -p 80$BUILD_NUMBER:80 --name webserver-$BUILD_NUMBER jhadeepak/jenkins:$BUILD_NUMBER
+                    sudo docker ps -a 
                     URL="http://localhost:80$BUILD_NUMBER"
+                    echo $URL
                     STATUS=`curl $URL -k -s -f -o /dev/null && echo "SUCCESS" || echo "ERROR"`
+                    echo $STATUS
                     if [[ $STATUS != SUCCESS ]]; then
                         exit 1
                     fi
