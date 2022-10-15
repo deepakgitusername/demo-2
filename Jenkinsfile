@@ -2,7 +2,7 @@ pipeline {
     agent any 
     environment {
         DOCKER_USERNAME     = credentials('jenkins-docker-username')
-        DOCKER_PASSWORD     = credentials('jenkins-docker-username')
+        DOCKER_PASSWORD     = credentials('jenkins-docker-password')
 	}
     stages {
         stage('Building Image') { 
