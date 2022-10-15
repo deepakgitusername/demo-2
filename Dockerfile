@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:7
 MAINTAINER Linux2Cloud
 RUN yum -y install httpd
 COPY index.html /var/www/html/
