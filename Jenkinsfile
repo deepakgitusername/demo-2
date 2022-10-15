@@ -15,6 +15,20 @@ pipeline {
                 '''
             }
         }
+    stages {
+        stage('Testing Image') { 
+            steps {
+                sh 'echo "Testing Image by building container"'
+                sh '''
+                    docker run -d --rm -it -p 80$BUILD_NUMBER:80 --name webserver-$BUILD_NUMBER jhadeepak/jenkins:$BUILD_NUMBER
+                    URL="http://localhost:80$BUILD_NUMBER"
+                    STATUS=`curl $URL -k -s -f -o /dev/null && echo "SUCCESS" || echo "ERROR"`
+                    if [[ $STATUS != SUCCESS ]]; then
+                        exit 1
+                    fi
+                '''
+            }
+        }
         stage('Pushing Image') { 
             steps {
                 sh 'echo "Pusing Image to registry"'
@@ -24,7 +38,16 @@ pipeline {
                 '''
             }
         }
-        
+        stage('Cleanup') { 
+            steps {
+                sh 'echo "Stoping Container and removing image"'
+                sh '''
+                    docker stop webserver-$BUILD_NUMBER
+                    docker rmi jhadeepak/jenkins:$BUILD_NUMBER --force
+                    
+                '''
+            }
+        }
     }
 	post {
         always {
